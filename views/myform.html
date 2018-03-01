@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>提交申请</title>
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="css/element-ui.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/css.css">
+        <link rel="stylesheet" href="css/index.css">
+    </head>
+
+    <body>
+        <div id="myform" v-cloak>
+            <!-- <div class="head">
+            <el-row :gutter="20" style="margin:15px 0">
+                <el-col :span="18" style="padding:0">
+                    <div class="grid-content headL">
+                        {{formname}}
+                    </div>
+                </el-col>
+            </el-row>
+        </div> -->
+            <el-row :gutter="20" class="form-cont" style="margin-left:0; margin-right:0">
+                <el-col v-for="(element, index) in list" :key="index" :span="form_layout=='双列' && element.form_layout=='form_layout1' ? 12:24">
+                    <div class="grid-content bg-purple">
+                        <div class="areaItem" v-if="element.visible">
+                            <el-col v-if="element.Disp!='不显示'" :span="element.Disp==='在左面' ? 4:24" style="padding:0;" class="areaItemhd">
+                                <div v-bind:class="[element.Disp==='在左面' ? 'areaItemhd-cont':'']">
+                                    {{element.label}}
+                                    <span v-if="element.allowBlank">*</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="element.Disp==='不显示' || element.Disp==='在上面' ? 24:20" style="padding:0;">
+                                <p v-if="element.description">{{element.description}}</p>
+                                <div class="elementwrap">
+                                    <el-input v-model="element.value" v-if="element.type=='text'" :readonly="element.enable"></el-input>
+
+                                    <el-input type="textarea" :rows="3" :readonly="element.enable" v-model="element.value" v-if="element.type=='textarea'">
+                                    </el-input>
+
+                                    <el-input type="number" :readonly="element.enable" v-model="element.value" v-if="element.type=='number'">
+                                    </el-input>
+
+                                    <el-date-picker v-model="element.value" :format="element.formatvalue==='format1'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm'" :readonly="element.enable" type="date" placeholder="选择日期" v-if="element.type=='datetime'">
+                                    </el-date-picker>
+
+                                    <el-radio-group :class="[element.layout==='horizontal'?'horizontal':'vertical']" v-model="element.value" :disabled="element.enable" v-if="element.type=='radiogroup'">
+                                        <el-radio v-for="(item, index) in element.items" :label="item.value">
+                                            {{item.text}}
+                                        </el-radio>
+                                    </el-radio-group>
+
+                                    <el-checkbox-group :class="[element.layout==='horizontal'?'horizontal':'vertical']" v-model="element.value" v-if="element.type=='checkboxgroup'">
+                                        <el-checkbox :disabled="element.enable" v-for="item in element.items" :key="item.text" :label="item.text"></el-checkbox>
+                                    </el-checkbox-group>
+
+                                    <el-select v-model="element.value" placeholder="请选择" v-if="element.type=='combo'" :disabled="element.enable">
+                                        <el-option v-for="item in element.items" :key="item.value" :value="item.value" :label="item.text">
+                                        </el-option>
+                                    </el-select>
+
+                                    <div class="separator" v-bind:style="{ borderTopWidth:element.lineWidth+'px',borderTopStyle: element.lineType,borderTopColor:element.color }" v-if="element.type=='separator'"></div>
+
+                                    <div v-if="element.type=='describe'" class="describe">
+                                        <textarea :disabled="element.enable" type="textarea" :rows="3" v-model="element.value" v-bind:style="{backgroundColor: element.bgColor,color:element.color }"></textarea>
+                                    </div>
+
+                                    <div v-if="element.type=='image'">
+
+                                        <el-upload class="upload-demo" :multiple="false" :action="baseUrl+'/upload'" :data={usage:'workflow'} :on-preview="handlePreview" :on-remove="handleRemoveimg" :on-change="element.allowMulti ? void(0):change" :on-success="success_img" :file-list="element.filelist" list-type="picture">
+                                            <el-button size="small" type="primary">点击上传</el-button>
+                                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                        </el-upload>
+
+                                    </div>
+
+                                    <div v-if="element.type=='file'">
+                                        <el-upload class="upload-demo" :multiple="false" :action="baseUrl+'/upload'" :data={usage:'workflow'} :on-preview="handlePreview" :on-remove="handleRemovefile" :on-change="element.allowMulti ? void(0):change" :on-success="success_text" :file-list="element.filelist" list-type="text">
+                                            <el-button size="small" type="primary">点击上传</el-button>
+                                        </el-upload>
+                                    </div>
+
+                                </div>
+                                <p class="validate-note" :id="element.type+index"></p>
+                            </el-col>
+                            <div style="clear: both;">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear: both;">
+
+                    </div>
+                </el-col>
+                <div style="clear: both;">
+
+                </div>
+            </el-row>
+
+            <div class="myformbtn">
+                <div>
+                    <button type="button" class="btn btn-primary" v-on:click="creat('creat')">提交</button>
+                    <button type="button" class="btn btn-primary" v-on:click="creat('save')">暂存</button>
+                    <button type="button" class="btn btn-danger" v-on:click="deleteform()">删除</button>
+                </div>
+            </div>
+        </div>
+
+    </body>
+    <!-- 先引入 Vue -->
+    <!--<script type="text/javascript" src="js/vue.min2.js"></script>-->
+    <!--这个版本input disabled有问题-->
+    <script src="js/vue.js"></script>
+    <script type="text/javascript" src="js/host.js"></script>
+
+    <!-- 引入组件库 -->
+    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <script charset="UTF-8" src="js/element-ui.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+    <!-- resource请求后台接口 -->
+    <script src="js/vue-resource@1.3.4.js"></script>
+    <script type="text/javascript" src="js/myform.js"></script>
+
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>流程设计</title>
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/jquery-ui.css">
+        <link rel="stylesheet" href="css/css.css">
+        <link rel="stylesheet" href="css/index.css">
+    </head>
+
+    <body>
+        <div class="flowcont">
+            <div class="flowL flowLwrap">
+                <div class="flowbtn">
+                    <div id="flowbtn" class="flowL">
+                        <div class="item" data-index="1" id="sp"><i class="fa fa-eye"></i>审批</div>
+                        <div class="item" data-index="2" id="cs"><i class="fa fa-send"></i>抄送</div>
+                        <div class="item" data-index="3" id="hl"><i class="fa fa-random"></i>汇流</div>
+                    </div>
+                    <div class="flowR flowbtnR">
+                        <button type="button" class="btn btn_success" id="save">保存</button>
+                        <button type="button" class="btn btn_info" id="saveuse">保存并启用</button>
+                    </div>
+                </div>
+                <div id="container" class="container">
+                </div>
+            </div>
+            <div class="flowR flowRwrap">
+                <div class="flowtabs">
+                    <div id="node" class="tabitem">节点属性</div>
+                    <div id="flow" class="tabitem hot">流程属性</div>
+                    <div class="tab-bar sel"></div>
+                </div>
+                <div id="tabnode" class="tabcont tabnode">
+                </div>
+                <div id="tabflow" class="tabcont tabflow">
+                    <div class="colR-contItem">
+                        <div class="contItem-hd">
+                            <h4>提醒方式</h4>
+                        </div>
+                        <div class="contItem-body">
+                            <div class="checkbox-flowremind" data-id="{{attribute.flowremindvalue}}">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" id="flowremind1">邮件提醒</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" id="flowremind2">短信提醒</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="colR-contItem" style="margin-top: 10px;">
+                        <div class="contItem-body">
+                            <div class="checkbox-flowback" data-id="{{attribute.flowback}}">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" id="flowback1">流程发起后允许撤回</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">流程处理人员</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary contact_save" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+    <!-- 引入组件库 -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/jquery-ui-1.9.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery.jsPlumb-1.6.2-min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="js/lib/require.js" data-main="js/flowchart.js"></script>
+    <script id="node_attr" type="text/html">
+        {{if attribute}}
+        <div class="colR-contItem">
+            <div class="contItem-hd">
+                <h4>节点名称</h4>
+            </div>
+            <div class="contItem-body">
+                <input type="text" class="form-control" maxlength="10" value="{{attribute.name}}">
+            </div>
+        </div>
+        {{if attribute.name=="一级审批" || attribute.name=="二级审批"}}
+        <div class="colR-contItem">
+            <div class="contItem-hd">
+                <h4>负责人</h4>
+            </div>
+            <div class="contItem-body">
+                <div class="add_contact" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i>&nbsp;&nbsp;添加负责人</div>
+                <div class="select_contact">
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        <div class="colR-contItem">
+            <div class="contItem-hd">
+                <h4>操作权限</h4>
+            </div>
+            <div class="contItem-body permission">
+                <div class="head">
+                    <a>流程简报</a>
+                    <a>可见</a>
+                    <a>可编辑</a>
+                </div>
+                {{if attribute.formcontent.length>0}}
+                <div class="property">
+                    <div id="" class="listyle lihead">
+                        <span>全选</span>
+                        <div class="checkbox-property" data-id="">
+                            <label><input type="checkbox" id="view_2"></label>
+                            <label><input type="checkbox" id="edit_1"></label>
+                        </div>
+                    </div>
+                    <ul>
+                        {{each attribute.formcontent as item i}}
+                        <li id="{{item.widgetName}}" class="listyle">
+                            <span>{{item.label}}</span> {{if !attribute.optAuth}}
+                            <div class="checkbox-property" data-id="">
+                                <label><input type="checkbox" id="{{item.widgetName}}_3"></label>
+                                <label><input type="checkbox" id="{{item.widgetName}}_2"></label>
+                                <label><input type="checkbox" id="{{item.widgetName}}_1"></label>
+                            </div>
+                            {{else}}
+                            <div class="checkbox-property" data-id="{{attribute.optAuth[item.widgetName]}}">
+                                <label><input type="checkbox" id="{{item.widgetName}}_3"></label>
+                                <label><input type="checkbox" id="{{item.widgetName}}_2"></label>
+                                <label><input type="checkbox" id="{{item.widgetName}}_1"></label>
+                            </div>
+                            {{/if}}
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+        {{if attribute.name=="一级审批" || attribute.name=="二级审批"}}
+        <div class="colR-contItem">
+            <div class="contItem-hd">
+                <h4>流转规则</h4>
+            </div>
+            <div class="contItem-body">
+                <div class="radio-rules" data-id="{{attribute.rulesvalue}}">
+                    <div class="radio">
+                        <label><input type="radio" name="rules" id="rule1">任一审批人同意即可</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="rules" id="rule2">需全部审批人同意</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        <div class="colR-contItem">
+            <div class="contItem-hd">
+                <h4>提醒方式</h4>
+            </div>
+            <div class="contItem-body" id="remind">
+                <div class="checkbox-remind" data-id="{{attribute.remindvalue}}">
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="remind1">邮件提醒</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="remind2">短信提醒</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="colR-contItem">
+            <div class="contItem-hd">
+                <h4>节点处理工时</h4>
+            </div>
+            <div class="contItem-body">
+                <input type="text" class="form-control time" maxlength="10"><span style="vertical-align: -5px;">小时</span>
+            </div>
+        </div>
+        {{/if}}
+    </script>
+
+</html>

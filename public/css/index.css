@@ -1,0 +1,589 @@
+
+[v-cloak] {
+    display: none;
+}
+
+.head .grid-content {
+    min-height: 36px;
+    line-height: 36px;
+}
+
+.head .headL {
+    margin-left: 30px;
+    font-size: 18px;
+    color: #20a0ff;
+}
+
+.head .headR {
+    margin-right: 30px;
+    text-align: right;
+}
+
+.head .dropdown {
+    display: inline-block;
+}
+
+.tab .el-tabs__header {
+    text-align: center;
+    background-color: #f1f1f1;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 0;
+    margin-bottom: 0;
+}
+
+.tab .el-tabs__nav-wrap {
+    display: inline-block;
+    margin-bottom: -4px;
+}
+
+.formcolMwrap,
+.formcolRwrap {
+    overflow: auto;
+}
+
+.formcolLwrap {
+    border-right: 1px solid #e0e0e0;
+}
+
+.formcolRwrap {
+    background-color: #FAFAFA;
+    border-left: 1px solid #e0e0e0;
+}
+
+.form-wrap .formcolL {
+    margin: 0 12px;
+}
+
+.form-wrap .formcolR {
+    margin: 0 12px;
+}
+
+.form-wrap .grid-content h3 {
+    font-weight: 400;
+    font-size: 14px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 5px;
+}
+
+.form-wrap .formcolM .hdbtn {
+    text-align: right;
+    margin: 0 0 10px;
+    padding: 10px 10px 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.areaItem {
+    padding: 10px;
+    /*overflow: hidden;*/
+    position: relative;
+}
+
+.dragArea .areaItem.hot {
+    background-color: #D6EAF4;
+}
+
+.formcolM .dragArea .areaItem:hover {
+    background-color: #eaf3f6;
+}
+
+.formcolM .dragArea .areaItem.hot:hover {
+    background-color: #D6EAF4;
+}
+
+.areaItem .areaItemhd {
+    margin-bottom: 5px;
+}
+
+.areaItemhd-cont {
+    line-height: 36px;
+    /*margin-top: 8px;*/
+    /*position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: -moz-translate(0, -50%);
+    transform: -webkit-translate(0, -50%);
+    transform: translate(0, -50%);*/
+}
+
+.areaItem .areaItemhd span {
+    color: #ff4949;
+    margin-left: 5px;
+}
+
+.dragArea .areaItem i.el-icon-delete2 {
+    color: #ff4949;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: -moz-translate(0, -50%);
+    transform: -webkit-translate(0, -50%);
+    transform: translate(0, -50%);
+}
+
+.elementwrap {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.colR-contItem {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.colR-contItem:last-child {
+    border-bottom: 0;
+}
+
+.colR-contItem .contItem-hd h4 {
+    font-size: 14px;
+    margin: 10px 0;
+    display: inline-block;
+}
+
+.colR-contItem .contItem-hd .el-select {
+    float: right;
+    width: 50%;
+    font-size: 14px;
+}
+
+.colR-contItem .contItem-body .el-radio,
+.colR-contItem .contItem-body .el-checkbox {
+    margin-left: 0;
+    margin-bottom: 10px;
+}
+
+.colR-contItem .contItem-body .el-radio:last-child,
+.colR-contItem .contItem-body .el-checkbox:last-child {
+    margin-bottom: 0;
+}
+
+.formName {
+    display: inline-block;
+    max-width: 20%;
+}
+
+.formcol .grid-content {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: dashed 1px #dbdbdb;
+    margin-bottom: 10px;
+}
+
+.formcol .grid-content i {
+    color: #91ADCE;
+    font-size: 15px;
+}
+
+.formcolR .el-tabs__header {
+    background-color: transparent;
+    border-bottom: 1px solid #e0e0e0;
+    border-top: 0;
+}
+
+.formcolR .el-tabs__nav-wrap {
+    margin-bottom: -5px;
+}
+
+.item-number .el-radio {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.horizontal .el-radio,
+.horizontal .el-checkbox {
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.vertical .el-radio,
+.vertical .el-checkbox {
+    display: block;
+    margin-left: 0;
+}
+
+
+/*.separator{ border-top-width:3px; }*/
+
+.separator-radio {
+    width: 100%;
+}
+
+.separator-radio .separator {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.describe textarea {
+    width: 100%;
+}
+
+.upload-demo input[type=file] {
+    display: none;
+}
+
+.myformbtn {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    text-align: center;
+    display: block;
+    width: 100%;
+    border-top: 1px dashed #e0e0e0;
+    padding-top: 10px;
+}
+
+.myformbtn .suggest {
+    margin: 0 10px 10px;
+    overflow: hidden;
+}
+
+.myformbtn .suggest span {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 20px;
+}
+
+.myformbtn .suggest .el-textarea {
+    max-width: 85%;
+    vertical-align: middle;
+}
+
+.myformbtn .btn {
+    padding: 10px 20px;
+}
+
+.tab {
+    position: relative;
+}
+
+.tab .formName {
+    position: absolute;
+    left: 15px;
+    top: 12px;
+    z-index: 100;
+}
+
+.tab .close {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    z-index: 100;
+}
+
+.form-cont {
+    overflow: auto;
+    padding: 20px 0 0;
+}
+
+.describe-cont {
+    padding: 25px 10px;
+    border: 1px solid #bfcbd9;
+    border-radius: 5px;
+}
+
+.el-alert {
+    display: inline-block;
+    width: 20%;
+    position: absolute;
+    right: 45px;
+    top: 4px;
+    z-index: 100;
+}
+
+.el-alert i.el-icon-close {
+    display: none;
+}
+
+.view-upload .el-upload-list__item.is-success .el-upload-list__item-status-label {
+    display: none;
+}
+
+.view-upload .el-upload-list__item .el-icon-close {
+    display: none;
+}
+
+.viewhd {
+    margin: 10px;
+    line-height: 2rem;
+}
+
+.viewhd .viewhd2 {
+    border: 1px solid #e0e0e0;
+}
+
+.viewhd .viewhd1 {
+    border-bottom: 0;
+}
+
+.viewhd .viewhd2 .el-col {
+    border-left: 1px solid #e0e0e0;
+}
+
+.viewhd .viewhd2 .el-col:first-child {
+    border-left: 0;
+}
+
+.flowcont{ position: absolute; left: 0; top:0; width: 100%; height: 100%; }
+
+.flowcontL .flowcontL-top {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    overflow: hidden;
+}
+
+.flowL {
+    width: 75%;
+    float: left;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.flowR {
+    width: 25%;
+    float: right;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.flowL .flowbtn {
+    padding: 10px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    overflow: hidden;
+}
+
+.flowL .flowbtn .btn_success {
+    background: #5cb85c;
+    border-color: #5cb85c;
+    color: #fff!important
+}
+
+.flowL .flowbtn .btn_success:hover {
+    background: #5cb85c;
+    border-color: #5cb85c;
+    color: #fff
+}
+
+.flowL .flowbtn .btn_success:click {
+    background: #5cb85c;
+    color: #fff
+}
+
+.flowL .flowbtn .btn_info {
+    background: #20a0ff;
+    border-color: #20a0ff;
+    color: #fff!important
+}
+
+.flowL .flowbtn .btn_info:hover {
+    background: #20a0ff;
+    border-color: #20a0ff;
+    color: #fff
+}
+
+.flowL .flowbtn .btn_info:click {
+    background: #20a0ff;
+    color: #fff
+}
+
+.flowL .flowbtn .btn {
+    margin-left: 10px;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.flowL .item {
+    background: rgba(32, 160, 255, .8);
+    height: 34px;
+    padding: 0px 20px;
+    margin-right: 10px;
+    color: #fff;
+    border: 1px solid #50bfff;
+    font: 16px/34px "微软雅黑";
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.flowL .flowbtn .flowbtnR {
+    text-align: right;
+}
+
+.flowRwrap {
+    border-left: 1px solid #e0e0e0;
+    background-color: #FAFAFA;
+    height: 100%;
+}
+
+.flowtabs {
+    padding: 10px;
+    margin: 0 10px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+}
+
+.flowtabs .tabitem {
+    display: inline-block;
+    cursor: pointer;
+    color: #8391a5;
+    width: 88px;
+}
+
+.flowtabs .tabitem:hover {
+    color: #333333;
+}
+
+.flowtabs .tab-bar {
+    width: 88px;
+    height: 3px;
+    background-color: #20a0ff;
+    position: absolute;
+    bottom: 0;
+    left: -moz-calc(50% - 88px);
+    left: -webkit-calc(50% - 88px);
+    left: calc(50% - 88px);
+    -moz-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.flowtabs .tabitem.hot {
+    color: #20a0ff;
+}
+
+.flowtabs .tab-bar.sel {
+    left: 50%;
+    -moz-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.tabcont {
+    display: none;
+    padding: 0 10px;
+}
+
+.tabflow {
+    display: block;
+}
+
+.flowRwrap .checkbox {
+    margin-bottom: 10px;
+}
+
+.container {
+    overflow: hidden;
+}
+
+.delete {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: -10px;
+    color: #000;
+    font-size: 17px!important;
+}
+
+.node_selected {
+    border: 1px solid #5cb85c;
+    background: #5cb85c!important;
+}
+
+.add_contact {
+    text-align: center;
+    padding: 10px 0;
+    border: 1px solid #e0e0e0;
+}
+
+.add_contact:hover {
+    cursor: pointer;
+    color: #20a0ff;
+    border-color: #20a0ff;
+    transition: 0.3s
+}
+
+
+/*负责人*/
+
+.select_contact {
+    margin: 15px 0 10px 0;
+}
+
+.select_contact a {
+    display: inline-block;
+    background: #e0e0e0;
+    padding: 2px 5px;
+    margin: 0 5px 5px 0;
+}
+
+.select_contact i {
+    display: none
+}
+
+.select_contact a:hover {
+    text-decoration: none
+}
+
+
+/*操作权限*/
+
+.permission {
+    width: 100%;
+    border: 1px solid #eee;
+    margin-bottom: 10px
+}
+
+.permission .head {
+    background: #eee;
+    overflow: hidden;
+    padding: 5px 0
+}
+
+.permission .head a {
+    float: right;
+    padding: 0 12px;
+    color: #333;
+}
+
+.permission .head a:hover {
+    cursor: pointer;
+    text-decoration: none
+}
+.permission .property ul{ padding:0 10px 10px; }
+.permission .property .listyle{ line-height: 2em; overflow: hidden; }
+.permission .property .listyle span{ float: left; }
+.permission .property .listyle .checkbox-property{ float: right; }
+.permission .property .listyle .checkbox-property label{ float: right; vertical-align: text-top; margin:0 25px; }
+.permission .property .lihead{ padding:10px 72px 0 10px; }
+/*.permission .property .lihead .checkbox-property label{ margin:0 50px; }*/
+
+.time {
+    width: 35%!important;
+    float: left;
+    margin-right: 10px
+}
+
+.validate-note{ color: #ff4949; font-size: 12px; margin-top: 5px; display: none; }
+
