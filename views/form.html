@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>设计审批表单</title>
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="css/element-ui.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/css.css">
+        <link rel="stylesheet" href="css/index.css">
+    </head>
+
+    <body>
+        <div id="wrap" v-cloak>
+            <!--<div class="head">
+            <el-row :gutter="20" style="margin:15px 0">
+                <el-col :span="18" style="padding:0">
+                    <div class="grid-content headL">
+                        <i class="el-icon-arrow-left"></i>
+                        <el-input v-model="formName" placeholder="请输入内容" class="formName"></el-input>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>-->
+
+            <div class="tab">
+                <template>
+                    <p class="formName">{{formName}}</p>
+                    <!-- <p class="close" v-on:click="close"><i class="fa fa-close"></i></p> -->
+                    <el-alert title="选项不能重名" type="warning" show-icon v-show="showalert">
+                    </el-alert>
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="表单设计" name="first">
+                            <div id="form-wrap" class="form-wrap">
+                                <el-row :gutter="24" style="margin:0">
+                                    <el-col :span="6" style="padding:0;" class="formcolLwrap">
+                                        <div class="grid-content formcolL">
+                                            <h3>表单控件</h3>
+                                            <draggable v-model="list" class="dragArea" :options="{group:{ name:'people',  pull:'clone', put:false }}" @end="endDrag" @start="startDrag">
+                                                <el-col :span="12" v-for="(element, index) in list" :key="index" class="formcol">
+                                                    <div class="grid-content">
+                                                        <i :class="element.iconClass"></i> {{element.label}}
+                                                    </div>
+                                                </el-col>
+                                            </draggable>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="12" style="padding:0" class="formcolMwrap">
+                                        <div class="grid-content formcolM">
+                                            <div class="hdbtn">
+                                                <button class="btn btn-success" v-on:click="save()">
+                                                保存
+                                            </button>
+
+                                                <button class="btn btn-info" data-toggle="modal" data-target="#myModal" v-on:click="view()">
+                                                预览
+                                            </button>
+                                            </div>
+                                            <draggable v-model="list2" class="dragArea dragtoArea" :options="{group:'people'}">
+                                                <div class="areaItem" v-bind:class="[clickindex===index ? isHot:'']" v-for="(element, index) in list2" :key="index" v-on:click="checkItem(element,index)">
+                                                    <!--<div class="areaItemhd">
+                                                    {{element.label}}
+                                                    <span v-if="element.allowBlank">*</span>
+                                                </div>-->
+                                                    <el-col v-if="element.Disp!='不显示'" :span="element.Disp==='在左面' ? 3:24" style="padding:0;" class="areaItemhd">
+                                                        <!--<div class="areaItemhd-cont">
+                                                        {{element.label}}
+                                                        <span v-if="element.allowBlank">*</span>
+                                                    </div>-->
+                                                        <div v-bind:class="[element.Disp==='在左面' ? 'areaItemhd-cont':'']">
+                                                            {{element.label}}
+                                                            <span v-if="element.allowBlank">*</span>
+                                                        </div>
+                                                    </el-col>
+                                                    <el-col :span="element.Disp==='不显示' || element.Disp==='在上面' ? 23:20" style="padding:0;">
+                                                        <p v-if="element.description">{{element.description}}</p>
+                                                        <div class="elementwrap">
+
+                                                            <el-input v-model="element.value" :readonly="true" v-if="element.type=='text'"></el-input>
+
+                                                            <el-input type="textarea" :rows="3" :readonly="true" v-model="element.value" v-if="element.type=='textarea'">
+                                                            </el-input>
+
+                                                            <el-input type="number" :readonly="true" v-model="element.value" v-if="element.type=='number'">
+                                                            </el-input>
+
+                                                            <el-date-picker v-model="element.value[element.useSystemDate ? 'sys':'unsys']" :format="element.formatvalue==='format1'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm'" :readonly="true" type="date" placeholder="选择日期" v-if="element.type=='datetime'">
+                                                            </el-date-picker>
+
+                                                            <el-radio-group :class="[element.layout==='horizontal'?'horizontal':'vertical']" v-model="element.value" :disabled="true" v-if="element.type=='radiogroup'">
+                                                                <el-radio v-for="(item, index) in element.items" :label="item.value">
+                                                                    {{item.text}}
+                                                                </el-radio>
+                                                            </el-radio-group>
+
+                                                            <el-checkbox-group :class="[element.layout==='horizontal'?'horizontal':'vertical']" v-model="element.value" v-if="element.type=='checkboxgroup'">
+                                                                <el-checkbox :disabled="true" v-for="item in element.items" :key="item.text" :label="item.text"></el-checkbox>
+                                                            </el-checkbox-group>
+
+                                                            <el-select v-model="element.value" placeholder="请选择" :disabled="true" v-if="element.type=='combo'">
+                                                                <el-option v-for="item in element.items" :key="item.value" :value="item.value" :label="item.text">
+                                                                </el-option>
+                                                            </el-select>
+
+                                                            <div class="separator" v-bind:style="{ borderTopWidth:element.lineWidth+'px',borderTopStyle: element.lineType,borderTopColor:element.color }" v-if="element.type=='separator'"></div>
+
+                                                            <div v-if="element.type=='describe'" class="describe">
+                                                                <!-- <textarea :readonly="true" type="textarea" :rows="3" placeholder="请输入内容" v-model="element.value" v-bind:style="{backgroundColor: element.bgColor,color:element.color}"></textarea> -->
+                                                                <div class="describe-cont" v-bind:style="{backgroundColor: element.bgColor,color:element.color}">
+                                                                    描述文字
+                                                                </div>
+                                                            </div>
+
+                                                            <div v-if="element.type=='image'">
+                                                                <el-button :disabled="true" type="primary">上传图片<i class="el-icon-picture el-icon--right"></i></el-button>
+                                                            </div>
+
+                                                            <div v-if="element.type=='file'">
+                                                                <el-button :disabled="true" type="primary">上传文件<i class="el-icon-upload el-icon--right"></i></el-button>
+                                                            </div>
+
+                                                        </div>
+                                                    </el-col>
+                                                    <el-col :span="1" style="padding:0;">
+                                                        <i v-if="clickindex===index ? isdel=true:isdel=false" class="el-icon-delete2" v-on:click="delItem(index)"></i>
+                                                    </el-col>
+                                                    <div style="clear: both;">
+
+                                                    </div>
+                                                </div>
+                                            </draggable>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="6" style="padding:0;" class="formcolRwrap">
+                                        <div class="grid-content formcolR">
+
+                                            <el-tabs v-model="attrname">
+                                                <el-tab-pane label="控件属性" name="attr1">
+                                                    <div class="colR-cont" v-if="attribute">
+
+                                                        <div class="colR-contItem" v-if="attribute.type!='describe'">
+                                                            <div class="contItem-hd">
+                                                                <h4>标题</h4>
+                                                                <!--<el-select v-model="value" placeholder="请选择">
+                                                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                                        </el-option>
+                                                    </el-select>-->
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-input v-model="attribute.label" :maxlength="50"></el-input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem item-number" v-if="attribute.type!='describe'">
+                                                            <div class="contItem-hd">
+                                                                <h4>标题显示</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-radio-group class="separator-radio" v-model="attribute.Disp">
+                                                                    <el-radio v-for="(item, index) in labelDisp" :label="item">
+                                                                    </el-radio>
+                                                                </el-radio-group>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem">
+                                                            <div class="contItem-hd">
+                                                                <h4>描述内容</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-input type="textarea" :rows="3" :maxlength="1000" v-model="attribute.description"></el-input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type=='text' || attribute.type=='textarea' || attribute.type=='number'">
+                                                            <div class="contItem-hd">
+                                                                <h4>默认值</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-input v-model="attribute.value"></el-input>
+
+                                                                <div style="margin-top:10px;">
+                                                                    <el-checkbox :disabled="!attribute.value" v-model="attribute.enable">只读</el-checkbox>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="colR-contItem" v-if="attribute.type=='datetime'">
+                                                            <div class="contItem-hd">
+                                                                <h4>日期格式</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-select v-model="attribute.formatvalue" placeholder="请选择" @change="dateformate_sel">
+                                                                    <el-option v-for="item in dateformats" :key="item.formatvalue" :label="item.text" :value="item.formatvalue">
+                                                                    </el-option>
+                                                                </el-select>
+                                                            </div>
+                                                        </div>
+
+                                                        <!--日期默认值-->
+                                                        <div class="colR-contItem" v-if="attribute.type=='datetime'">
+                                                            <div class="contItem-hd">
+                                                                <h4>默认值</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <div>
+                                                                    <el-checkbox v-model="attribute.useSystemDate">系统日期</el-checkbox>
+                                                                </div>
+
+                                                                <div style="margin-top:10px;">
+                                                                    <el-checkbox v-model="attribute.enable">只读</el-checkbox>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="colR-contItem" v-if="attribute.type=='combo' || attribute.type=='radiogroup'">
+                                                            <div class="contItem-hd">
+                                                                <h4>选项</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-radio-group v-model="attribute.value">
+                                                                    <el-radio v-for="(item, index) in attribute.items" :label="item.value" style="display: block;">
+                                                                        <el-input v-model="item.text" @blur="inputblur(item,index)"></el-input>
+                                                                        <el-button type="danger" icon="close" size="mini" v-on:click="delOption(index)"></el-button>
+                                                                    </el-radio>
+                                                                </el-radio-group>
+                                                                <div>
+                                                                    <el-button style="margin-left:24px" type="text" v-on:click="addOption">添加选项</el-button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!--复选框组选项-->
+                                                        <div class="colR-contItem" v-if="attribute.type=='checkboxgroup'">
+                                                            <div class="contItem-hd">
+                                                                <h4>选项</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <!--<el-radio-group v-model="attribute.value">
+                                                                <el-radio v-for="(item, index) in attribute.items" :label="item.value">
+                                                                    <el-input v-model="item.text" placeholder="请输入内容"></el-input>
+                                                                    <el-button type="danger" icon="close" size="mini" v-on:click="delOption(index)"></el-button>
+                                                                </el-radio>
+                                                            </el-radio-group>-->
+
+                                                                <el-checkbox-group v-model="attribute.value">
+                                                                    <el-checkbox v-for="(item, index) in attribute.items" :label="item.text" style="display: block;">
+                                                                        <el-input v-model="item.text" @blur="inputblur(item,index)" style="width: 216.91px;"></el-input>
+                                                                        <el-button type="danger" icon="close" size="mini" v-on:click="delOption(index)"></el-button>
+                                                                    </el-checkbox>
+                                                                </el-checkbox-group>
+                                                                <div>
+                                                                    <el-button style="margin-left:24px" type="text" v-on:click="addOption">添加选项</el-button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem item-number" v-if="attribute.type=='number'">
+                                                            <div class="contItem-hd">
+                                                                <h4>数字类型</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-radio class="radio" v-model="attribute.dataType" label="int">整数</el-radio>
+                                                                <el-radio class="radio" v-model="attribute.dataType" label="double">小数</el-radio>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem item-number" v-if="attribute.type=='radiogroup' ||attribute.type=='checkboxgroup'">
+                                                            <div class="contItem-hd">
+                                                                <h4>按钮布局设置</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-radio class="radio" v-model="attribute.layout" label="horizontal">横向排列</el-radio>
+                                                                <el-radio class="radio" v-model="attribute.layout" label="vertical">纵向排列</el-radio>
+                                                            </div>
+                                                        </div>
+
+                                                        <!--单选按钮组默认值-->
+                                                        <div class="colR-contItem" v-if="attribute.type=='radiogroup' || attribute.type=='checkboxgroup'">
+                                                            <div class="contItem-hd">
+                                                                <h4>默认值</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <div>
+                                                                    <el-checkbox v-model="attribute.enable">只读</el-checkbox>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type=='image' || attribute.type=='file'">
+                                                            <div class="contItem-hd">
+                                                                <h4>上传设置</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <div>
+                                                                    <el-checkbox v-model="attribute.allowMulti">允许上传多个文件</el-checkbox>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type=='text' || attribute.type=='textarea' || attribute.type=='number' || attribute.type=='datetime' || attribute.type=='radiogroup' || attribute.type=='checkboxgroup' || attribute.type=='combo' || attribute.type=='image' || attribute.type=='file'">
+                                                            <div class="contItem-hd">
+                                                                <h4>校验</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <div>
+                                                                    <el-checkbox v-model="attribute.allowBlank">必填</el-checkbox>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type=='separator'">
+                                                            <div class="contItem-hd">
+                                                                <h4>分割线类型</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-radio-group class="vertical separator-radio" v-model="attribute.lineType">
+                                                                    <el-radio v-for="(item, index) in lineTypes" :label="item">
+                                                                        <div class="separator" v-bind:style="{ borderTopWidth:attribute.lineWidth+'px',borderTopStyle: item,borderTopColor:'#666666' }"></div>
+                                                                    </el-radio>
+                                                                </el-radio-group>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type=='separator'">
+                                                            <div class="contItem-hd">
+                                                                <h4>分割线宽度</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-input-number v-model="attribute.lineWidth" :min="1" :max="10"></el-input-number>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type=='separator'">
+                                                            <div class="contItem-hd">
+                                                                <h4>分割线颜色</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-color-picker v-model="attribute.color"></el-color-picker>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type=='describe'">
+                                                            <div class="contItem-hd">
+                                                                <h4>文字颜色</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-color-picker v-model="attribute.color"></el-color-picker>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type=='describe'">
+                                                            <div class="contItem-hd">
+                                                                <h4>背景颜色</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-color-picker v-model="attribute.bgColor"></el-color-picker>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem" v-if="attribute.type!='separator'&& attribute.type!='describe'">
+                                                            <div class="contItem-hd">
+                                                                <h4>布局</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                控件宽度占整行的<el-select v-model="attribute.form_layout" placeholder="请选择" :disabled="form_layout=='双列'?false:true">
+                                                                    <el-option v-for="item in form_layout_opt" :key="item.value" :label="item.label" :value="item.value">
+                                                                    </el-option>
+                                                                </el-select>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </el-tab-pane>
+                                                <el-tab-pane label="表单属性" name="attr2">
+                                                    <div class="colR-cont">
+                                                        <div class="colR-contItem">
+                                                            <div class="contItem-hd">
+                                                                <h4>标题</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-input v-model="formName" :maxlength="50"></el-input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem">
+                                                            <div class="contItem-hd">
+                                                                <h4>描述</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+                                                                <el-input type="textarea" :rows="3" :maxlength="1000" v-model="desc"></el-input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="colR-contItem">
+                                                            <div class="contItem-hd">
+                                                                <h4>表单布局</h4>
+                                                            </div>
+                                                            <div class="contItem-body">
+
+                                                                <el-radio-group v-model="form_layout">
+                                                                    <el-radio-button label="单列"></el-radio-button>
+                                                                    <el-radio-button label="双列"></el-radio-button>
+                                                                </el-radio-group>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </el-tab-pane>
+                                            </el-tabs>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="流程设计" name="second" id="flowtab">
+                            <iframe id="iframeId" class="iframe" :src="iframesrc" frameborder="0"></iframe>
+                        </el-tab-pane>
+                    </el-tabs>
+                </template>
+            </div>
+
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="width:50%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                            <h4 class="modal-title" id="myModalLabel">{{formName}}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <el-col class="areaItem" v-for="(element, index) in list2" :key="index" v-if="element.visible" :span="form_layout=='双列' && element.form_layout=='form_layout1' ? 12:24">
+
+                                <el-col v-if="element.Disp!='不显示'" :span="element.Disp==='在左面' ? 3:24" style="padding:0;" class="areaItemhd">
+                                    <div v-bind:class="[element.Disp==='在左面' ? 'areaItemhd-cont':'']">
+                                        {{element.label}}
+                                        <span v-if="element.allowBlank">*</span>
+                                    </div>
+                                </el-col>
+
+                                <el-col :span="element.Disp==='不显示' ? 23:20" style="padding:0;">
+                                    <p v-if="element.description">{{element.description}}</p>
+                                    <div class="elementwrap">
+                                        <el-input v-model="element.value" v-if="element.type=='text'" :readonly="element.enable"></el-input>
+
+                                        <el-input type="textarea" :rows="3" :readonly="element.enable" v-model="element.value" v-if="element.type=='textarea'">
+                                        </el-input>
+
+                                        <el-input type="number" :readonly="element.enable" v-model="element.value" v-if="element.type=='number'">
+                                        </el-input>
+
+                                        <el-date-picker v-model="element.value[element.useSystemDate ? 'sys':'unsys']" :format="element.formatvalue==='format1'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm'" :readonly="element.enable" type="date" placeholder="选择日期" v-if="element.type=='datetime'">
+                                        </el-date-picker>
+
+                                        <el-radio-group :class="[element.layout==='horizontal'?'horizontal':'vertical']" v-model="element.value" :disabled="element.enable" v-if="element.type=='radiogroup'">
+                                            <el-radio v-for="(item, index) in element.items" :label="item.value">
+                                                {{item.text}}
+                                            </el-radio>
+                                        </el-radio-group>
+
+                                        <el-checkbox-group :class="[element.layout==='horizontal'?'horizontal':'vertical']" v-model="element.value" v-if="element.type=='checkboxgroup'">
+                                            <el-checkbox :disabled="element.enable" v-for="item in element.items" :key="item.text" :label="item.text"></el-checkbox>
+                                        </el-checkbox-group>
+
+                                        <el-select v-model="element.value" placeholder="请选择" v-if="element.type=='combo'" :disabled="element.enable">
+                                            <el-option v-for="item in element.items" :key="item.value" :value="item.value" :label="item.text">
+                                            </el-option>
+                                        </el-select>
+
+                                        <div class="separator" v-bind:style="{ borderTopWidth:element.lineWidth+'px',borderTopStyle: element.lineType,borderTopColor:element.color }" v-if="element.type=='separator'"></div>
+
+                                        <div v-if="element.type=='describe'" class="describe">
+                                            <!-- <textarea :disabled="element.enable" :readonly="true" type="textarea" :rows="3" placeholder="请输入内容" v-model="element.value" v-bind:style="{backgroundColor: element.bgColor,color:element.color }"></textarea> -->
+                                            <div class="describe-cont" v-bind:style="{backgroundColor: element.bgColor,color:element.color}">
+                                                描述文字
+                                            </div>
+                                        </div>
+
+                                        <div v-if="element.type=='image'">
+
+                                            <el-upload class="upload-demo" :multiple="false" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :on-change="element.allowMulti ? void(0):change" :file-list="element.filelist" list-type="picture">
+                                                <el-button size="small" type="primary">点击上传</el-button>
+                                                <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+                                            </el-upload>
+
+                                        </div>
+
+                                        <div v-if="element.type=='file'">
+                                            <el-upload class="upload-demo" :multiple="false" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :on-change="element.allowMulti ? void(0):change" :file-list="element.filelist" list-type="text">
+                                                <el-button size="small" type="primary">点击上传</el-button>
+                                            </el-upload>
+                                        </div>
+
+                                    </div>
+                                </el-col>
+                                <div style="clear: both;">
+
+                                </div>
+                            </el-col>
+                            <div style="clear: both;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+    <!-- 先引入 Vue -->
+    <!--<script type="text/javascript" src="js/vue.min2.js"></script>-->
+    <!--这个版本input disabled有问题-->
+    <script src="js/vue.js"></script>
+    <script type="text/javascript" src="js/host.js"></script>
+
+    <!-- 引入组件库 -->
+    <script charset="UTF-8" src="js/element-ui.js"></script>
+    <!--用本地的日历中文编码格式有问题-->
+    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/Sortable.js"></script>
+    <script type="text/javascript" src="js/vuedraggable.js"></script>
+    <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+    <!-- resource请求后台接口 -->
+    <script src="js/vue-resource@1.3.4.js"></script>
+    <script type="text/javascript" src="js/vuedragMain.js"></script>
+
+</html>

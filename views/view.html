@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>我提交的审批</title>
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="css/element-ui.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="photoswipe/photoswipe.css" />
+        <link rel="stylesheet" type="text/css" href="photoswipe/default-skin/default-skin.css" />
+        <link rel="stylesheet" href="css/css.css">
+        <link rel="stylesheet" href="css/index.css">
+        <style type="text/css">
+            .modal-dialog {
+                width: 80% !important;
+            }
+            
+            .modal-body {
+                height: 600px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="view" v-cloak>
+            <div class="viewhd">
+                <el-row :gutter="20" class="viewhd2 viewhd1">
+                    <el-col :span="12" style="padding: 10px 20px;">
+                        <div class="grid-content">{{forname}}</div>
+                    </el-col>
+                    <el-col :span="12" style="padding: 10px 20px; text-align: right;">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" v-on:click="flowstate()">流程状态</button>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20" class="viewhd2">
+                    <el-col :span="8" style="padding: 10px 20px;">
+                        <div class="grid-content">提交人：{{applicant}}</div>
+                    </el-col>
+                    <el-col :span="8" style="padding: 10px 10px;">
+                        <div class="grid-content">部门：{{dept}}</div>
+                    </el-col>
+                    <el-col :span="8" style="padding: 10px 10px;">
+                        <div class="grid-content">日期：{{startTime}}</div>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-row :gutter="20" style="margin-left: 0; margin-right: 0;">
+                <el-col class="areaItem" v-for="(element, index) in list" :key="index" v-if="element.visible" :span="form_layout=='双列' && element.form_layout=='form_layout1' ? 12:24">
+
+                    <el-col v-if="element.Disp!='不显示'" :span="element.Disp==='在左面' ? 3:24" style="padding:0;" class="areaItemhd">
+                        <div v-bind:class="[element.Disp==='在左面' ? 'areaItemhd-cont':'']">
+                            {{element.label}}
+                            <span v-if="element.allowBlank">*</span>
+                        </div>
+                    </el-col>
+
+                    <el-col :span="element.Disp==='不显示' ? 24:21" style="padding:0; line-height: 36px;">
+                        <p v-if="element.description">{{element.description}}</p>
+                        <div class="elementwrap">
+                            <div v-if="element.type=='text'">{{element.value}}</div>
+                            <div v-if="element.type=='textarea'">{{element.value}}</div>
+                            <div v-if="element.type=='number'">{{element.value}}</div>
+                            <!--<div v-if="element.type=='datetime'">{{element.value}}</div>-->
+
+                            <el-date-picker v-model="element.value" :format="element.formatvalue==='format1'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm'" :readonly="element.enable" type="date" placeholder="选择日期" v-if="element.type=='datetime'" :disabled=true>
+                            </el-date-picker>
+
+                            <el-radio-group :class="[element.layout==='horizontal'?'horizontal':'vertical']" v-model="element.value" :disabled=true v-if="element.type=='radiogroup'">
+                                <el-radio v-for="(item, index) in element.items" :label="item.value">
+                                    {{item.text}}
+                                </el-radio>
+                            </el-radio-group>
+
+                            <el-checkbox-group :class="[element.layout==='horizontal'?'horizontal':'vertical']" v-model="element.value" v-if="element.type=='checkboxgroup'">
+                                <el-checkbox :disabled=true v-for="item in element.items" :key="item.text" :label="item.text"></el-checkbox>
+                            </el-checkbox-group>
+
+                            <el-select v-model="element.value" placeholder="请选择" v-if="element.type=='combo'" :disabled=true>
+                                <el-option v-for="item in element.items" :key="item.value" :value="item.value" :label="item.text">
+                                </el-option>
+                            </el-select>
+
+                            <div class="separator" v-bind:style="{ borderTopWidth:element.lineWidth+'px',borderTopStyle: element.lineType,borderTopColor:element.color }" v-if="element.type=='separator'"></div>
+
+                            <div v-if="element.type=='describe'" class="describe">
+                                <div class="describe-cont" v-bind:style="{backgroundColor: element.bgColor,color:element.color}">
+                                    {{element.value}}
+                                </div>
+                            </div>
+
+                            <div v-if="element.type=='image'" class="view-upload">
+
+                                <el-upload class="upload-demo" :multiple="false" action="https://jsonplaceholder.typicode.com/posts/" :file-list="element.filelist" list-type="picture">
+                                </el-upload>
+
+                            </div>
+
+                            <div v-if="element.type=='file'" class="view-upload">
+                                <el-upload class="upload-demo" :multiple="false" action="https://jsonplaceholder.typicode.com/posts/" :file-list="element.filelist" list-type="text">
+                                </el-upload>
+                            </div>
+
+                        </div>
+                    </el-col>
+                    <div style="clear: both;">
+
+                    </div>
+                </el-col>
+                <div style="clear: both;">
+
+                </div>
+            </el-row>
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">流程状态</h4>
+                        </div>
+                        <div class="modal-body">
+                            <iframe class="iframe" :src="iframesrc" frameborder="0"></iframe>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary contact_save" data-dismiss="modal">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+            <div class="pswp__bg"></div>
+
+            <div class="pswp__scroll-wrap">
+
+                <div class="pswp__container">
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                </div>
+
+                <div class="pswp__ui pswp__ui--hidden">
+
+                    <div class="pswp__top-bar">
+
+                        <div class="pswp__counter"></div>
+
+                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                        <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                        <div class="pswp__preloader">
+                            <div class="pswp__preloader__icn">
+                                <div class="pswp__preloader__cut">
+                                    <div class="pswp__preloader__donut"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                        <div class="pswp__share-tooltip"></div>
+                    </div>
+
+                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+                    <div class="pswp__caption">
+                        <div class="pswp__caption__center"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </body>
+    <!-- 先引入 Vue -->
+    <!--<script type="text/javascript" src="js/vue.min2.js"></script>-->
+    <!--这个版本input disabled有问题-->
+    <script src="js/vue.js"></script>
+    <script type="text/javascript" src="js/host.js"></script>
+
+    <!-- 引入组件库 -->
+    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <script charset="UTF-8" src="js/element-ui.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+    <!-- resource请求后台接口 -->
+    <script src="js/vue-resource@1.3.4.js"></script>
+    <script type="text/javascript" src="js/view.js"></script>
+    
+    <script src="photoswipe/photoswipe.js" type="text/javascript" charset="utf-8"></script>
+    <script src="photoswipe/photoswipe-ui-default.js" type="text/javascript" charset="utf-8"></script>
+
+</html>

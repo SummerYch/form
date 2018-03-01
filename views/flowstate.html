@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>流程状态</title>
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/jquery-ui.css">
+        <link rel="stylesheet" href="css/css.css">
+        <link rel="stylesheet" href="css/flowstate.css">
+    </head>
+
+    <body>
+        <div class="head">
+            <ul class="state">
+                <li class="processed"><u></u>已流转节点</li>
+                <li class="processing"><u></u>处理中节点</li>
+                <li class="processnull"><u></u>未流转节点</li>
+            </ul>
+            <div class="headbtn">查看所有日志</div>
+        </div>
+        
+        <div class="flow">
+            <div class="flow-cont" id="main">
+                
+            </div>
+        </div>
+        <div class="wrap">
+            <div class="wrap-bg wrap-close">
+                <div class="wrap-cont" id="logtable">
+                    <div class="wraphd">
+                        <i class="fa fa-close wrap-close"></i>
+                        <span>流程日志——全部</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 引入组件库 -->
+            <script src="js/jquery.min.js"></script>
+            <script src="js/lib/bootstrap.min.js"></script>
+            <script src="js/jquery-ui-1.9.2.min.js" type="text/javascript" charset="utf-8"></script>
+            <script src="js/jquery.jsPlumb-1.6.2-min.js" type="text/javascript" charset="utf-8"></script>
+
+            <script src="js/lib/require.js" data-main="js/flowstate.js"></script>
+            <script id="log" type="text/html">
+                {{if list}}
+                <table class="table" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th>负责人</th>
+                        <th>节点名称</th>
+                        <th>节点操作</th>
+                        <th>开始时间</th>
+                        <th>处理时间</th>
+                    </tr>
+                    {{each list as item i}}
+                    <tr>
+                        <td>{{item.cur_handler}}</td>
+                        <td>{{item.task_name}}</td>
+                        <td>{{item.status}}</td>
+                        <td>{{item.reach_time}}</td>
+                        <td>{{item.finished_time}}</td>
+                    </tr>
+                    {{/each}}
+                </table>
+                {{/if}}
+            </script>
+    </body>
+
+</html>

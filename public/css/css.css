@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+}
+
+label {
+    margin-bottom: 0;
+    font-weight: 400;
+}
+
+iframe {
+    width: 100%; border: 0; height: 100%;
+}
+
+textarea,
+.el-textarea__inner {
+    resize: none;
+}
+
+.checkbox,
+ul {
+    margin: 0; list-style: none;
+}
+th{ font-weight: 400; }

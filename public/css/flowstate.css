@@ -1,0 +1,46 @@
+.head{ text-align: center; padding:10px 0; position: relative; }
+.head .state,.head .state li{ display: inline-block; }
+.head .state{ margin-top: 6px; }
+.head .state li{ color: #989898; margin-right: 20px; }
+.head .state li u{ display: inline-block; width: 15px; height: 15px; border: 1px solid #e0e0e0; vertical-align: text-bottom; margin-right: 5px; }
+.head .state li.processed u{ border-color: #178cdf; background-color: #178cdf; }
+.head .state li.processing u{ border-color: #178cdf; background-color: #DCEEF6; }
+.head .headbtn{ display: inline-block; padding:5px 10px; border: 1px solid #e0e0e0; position: absolute; right: 10px; top: 10px; cursor: pointer; }
+
+.wrap{ position: fixed; right: 0; top:0; z-index: 10; width: 100%; height: 100%; display: none; }
+.wrap-bg{ position: absolute; right: 0; top:0; z-index: 11; width: 100%; height: 100%; background-color: rgba(0,0,0,.3); }
+.wrap-cont{ position: absolute; left: 100%; top:0; z-index: 12; width: 70%; height: 100%; background-color: #ffffff; 
+    -moz-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s; }
+.wrap-cont.hot{ left:30%;
+    -moz-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s; }
+.wraphd{ padding:10px; }
+.wraphd .wrap-close{ font-size: 18px; color: #989898; float: right; cursor: pointer; }
+
+.flow{ text-align: center; }
+.flow-cont{ display: inline-block; }
+
+.item {
+    /*background: rgba(32, 160, 255, .8);*/
+    height: 34px;
+    padding: 0px 20px;
+    margin-right: 10px;
+    color: #fff;
+    border: 1px solid #e0e0e0;
+    font: 16px/34px "微软雅黑";
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+/*processed 已流转*/
+.item.processed{ border-color: #178cdf; background-color: #178cdf; }
+/*processing 处理中*/
+.item.processing{ border-color: #178cdf; background-color: #DCEEF6; color: #333333; }
+/*processing 未流转*/
+.item.noprocess{ border-color: #e0e0e0; color: #333333; }
+
